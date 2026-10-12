@@ -1,6 +1,11 @@
 /**
- * 部门内核类型（用户管理左侧部门树、角色数据权限部门树使用）
+ * 部门查询参数
  */
+export interface DeptQuery extends PageQuery {
+  deptName?: string;
+  deptCategory?: string;
+  status?: number;
+}
 
 /**
  * 部门类型
@@ -24,7 +29,7 @@ export interface DeptVO extends BaseEntity {
 }
 
 /**
- * 部门树节点
+ * 部门类型
  */
 export interface DeptTreeVO extends BaseEntity {
   id: number | string;
@@ -33,4 +38,23 @@ export interface DeptTreeVO extends BaseEntity {
   weight: number;
   children: DeptTreeVO[];
   disabled: boolean;
+}
+
+/**
+ * 部门表单类型
+ */
+export interface DeptForm {
+  parentName?: string;
+  parentId?: number | string;
+  children?: DeptForm[];
+  deptId?: number | string;
+  deptName?: string;
+  deptCategory?: string;
+  orderNum?: number;
+  leader?: string;
+  phone?: string;
+  email?: string;
+  status?: string;
+  delFlag?: string;
+  ancestors?: string;
 }
