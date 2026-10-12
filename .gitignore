@@ -27,3 +27,6 @@ yarn.lock
 # 编译生成的文件
 auto-imports.d.ts
 components.d.ts
+
+# Claude Code 本地配置
+.claude/
