@@ -296,7 +296,6 @@
                 value-key="id"
                 placeholder="请选择归属部门"
                 check-strictly
-                @change="handleDeptChange"
               />
             </el-form-item>
           </el-col>
@@ -355,19 +354,6 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12" v-if="form.userId == null || form.userId != useUserStore().userId">
-            <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择">
-                <el-option
-                  v-for="item in postOptions"
-                  :key="item.postId"
-                  :label="item.postName"
-                  :value="item.postId"
-                  :disabled="item.status == '1'"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
           <el-col :span="12" v-if="form.userId == null || form.userId != useUserStore().userId">
             <el-form-item label="角色" prop="roleIds">
               <el-select v-model="form.roleIds" filterable multiple placeholder="请选择">
@@ -455,8 +441,6 @@ import { to } from 'await-to-js';
 import { useRouter } from 'vue-router';
 import { getConfigKey } from '@/api/system/config';
 import { DeptTreeVO, DeptVO } from '@/api/system/dept/types';
-import { optionselect } from '@/api/system/post';
-import { PostVO } from '@/api/system/post/types';
 import { RoleVO } from '@/api/system/role/types';
 import api from '@/api/system/user';
 import { UserForm, UserQuery, UserVO } from '@/api/system/user/types';
@@ -487,7 +471,6 @@ const { treeCollapsed } = useTreeCollapsed();
 const deptOptions = ref<DeptTreeVO[]>([]);
 const enabledDeptOptions = ref<DeptTreeVO[]>([]);
 const initPassword = ref<string>('');
-const postOptions = ref<PostVO[]>([]);
 const roleOptions = ref<RoleVO[]>([]);
 /*** 用户导入参数 */
 const upload = reactive<ImportOption>({
@@ -533,7 +516,6 @@ const initFormData: UserForm = {
   gender: undefined,
   status: '0',
   remark: '',
-  postIds: [],
   roleIds: []
 };
 
@@ -781,7 +763,6 @@ const handleAdd = async () => {
   const { data } = await api.getUser();
   setDialogTitle('新增用户');
   openUserDialog();
-  postOptions.value = data.posts;
   roleOptions.value = data.roles;
   form.value.password = initPassword.value.toString();
 };
@@ -794,11 +775,9 @@ const handleUpdate = async (row?: Partial<UserForm>) => {
   setDialogTitle('修改用户');
   openUserDialog();
   Object.assign(form.value, data.user);
-  postOptions.value = data.posts;
   roleOptions.value = Array.from(
     new Map([...data.roles, ...data.user.roles].map(role => [role.roleId, role])).values()
   );
-  form.value.postIds = data.postIds;
   form.value.roleIds = data.roleIds;
   form.value.password = '';
 };
@@ -808,11 +787,10 @@ const submitForm = () => {
   userFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       if (form.value.userId) {
-        // 自己编辑自己的情况下 不允许编辑角色部门岗位
+        // 自己编辑自己的情况下 不允许编辑角色部门
         if (form.value.userId == useUserStore().userId) {
           form.value.roleIds = null;
           form.value.deptId = null;
-          form.value.postIds = null;
         }
         await api.updateUser(form.value);
       } else {
@@ -850,12 +828,6 @@ onMounted(() => {
     initPassword.value = response.data;
   });
 });
-
-async function handleDeptChange(value: number | string) {
-  const response = await optionselect(value);
-  postOptions.value = response.data;
-  form.value.postIds = [];
-}
 </script>
 
 <style lang="scss" scoped>

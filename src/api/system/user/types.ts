@@ -1,4 +1,3 @@
-import type { PostVO } from '@/api/system/post/types';
 import type { RoleVO } from '@/api/system/role/types';
 
 /**
@@ -48,7 +47,6 @@ export interface UserVO extends BaseEntity {
   dept?: { deptName?: string };
   roles: RoleVO[];
   roleIds: any;
-  postIds: any;
   roleId: any;
   admin: boolean;
 }
@@ -69,7 +67,6 @@ export interface UserForm {
   status: string;
   remark?: string;
   avatar?: string | number;
-  postIds: string[];
   roleIds: string[];
 }
 
@@ -88,10 +85,7 @@ export interface UserInfoVO {
   user: UserVO;
   roles: RoleVO[];
   roleIds: string[];
-  posts: PostVO[];
-  postIds: string[];
   roleGroup: string;
-  postGroup: string;
 }
 
 export interface ResetPwdForm {

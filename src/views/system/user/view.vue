@@ -20,7 +20,6 @@
           {{ selectDictLabel(sys_normal_disable, info.status) }}
         </el-tag>
       </el-descriptions-item>
-      <el-descriptions-item label="岗位">{{ postNames || '-' }}</el-descriptions-item>
       <el-descriptions-item label="用户性别">
         {{ selectDictLabel(sys_user_gender, info.gender) || '-' }}
       </el-descriptions-item>
@@ -40,7 +39,6 @@
 </template>
 
 <script setup lang="ts">
-import type { PostVO } from '@/api/system/post/types';
 import type { RoleVO } from '@/api/system/role/types';
 import type { UserVO } from '@/api/system/user/types';
 import api from '@/api/system/user';
@@ -52,18 +50,8 @@ const { sys_normal_disable, sys_user_gender } = toRefs<any>(useDict('sys_normal_
 const visible = ref(false);
 const loading = ref(false);
 const info = ref<UserVO | null>(null);
-const postOptions = ref<PostVO[]>([]);
 const roleOptions = ref<RoleVO[]>([]);
-const postIds = ref<string[]>([]);
 const roleIds = ref<string[]>([]);
-
-const postNames = computed(() => {
-  if (!postOptions.value.length || !postIds.value.length) return '';
-  return postOptions.value
-    .filter(p => postIds.value.includes(String(p.postId)))
-    .map(p => p.postName)
-    .join('、');
-});
 
 const roleNames = computed(() => {
   if (!roleOptions.value.length || !roleIds.value.length) return '';
@@ -79,9 +67,7 @@ async function openDrawer(userId: string | number) {
   try {
     const { data } = await api.getUser(userId);
     info.value = data.user;
-    postOptions.value = data.posts || [];
     roleOptions.value = data.roles || [];
-    postIds.value = (data.postIds || []).map(String);
     roleIds.value = (data.roleIds || []).map(String);
   } catch (error) {
     console.error('获取用户信息失败:', error);

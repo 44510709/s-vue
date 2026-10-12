@@ -40,7 +40,7 @@
                   <span>所属部门</span>
                 </div>
                 <span v-if="state.user.deptName" class="profile-item-value">
-                  {{ state.user.deptName }} / {{ state.postGroup }}
+                  {{ state.user.deptName }}
                 </span>
                 <span v-else class="profile-item-value">-</span>
               </li>
@@ -102,13 +102,11 @@ const activeTab = ref('userinfo');
 interface State {
   user: Partial<UserVO>;
   roleGroup: string;
-  postGroup: string;
   devices: any;
 }
 const state = ref<State>({
   user: {},
   roleGroup: '',
-  postGroup: '',
   devices: []
 });
 
@@ -119,7 +117,6 @@ const getUser = async () => {
   state.value.user = res.data.user;
   userForm.value = { ...res.data.user };
   state.value.roleGroup = res.data.roleGroup;
-  state.value.postGroup = res.data.postGroup;
 };
 
 const getOnlines = async () => {
