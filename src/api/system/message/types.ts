@@ -13,5 +13,4 @@ export interface MessageVO extends BaseEntity {
 export interface MessageBoxVO {
   systemList: MessageVO[];
   noticeList: MessageVO[];
-  workflowList: MessageVO[];
 }

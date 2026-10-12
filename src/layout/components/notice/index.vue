@@ -7,7 +7,6 @@
     <el-tabs v-model="activeTab" class="message-tabs" stretch>
       <el-tab-pane :label="`系统 ${tabCount.system}`" name="system"></el-tab-pane>
       <el-tab-pane :label="`通知 ${tabCount.notice}`" name="notice"></el-tab-pane>
-      <el-tab-pane :label="`工作 ${tabCount.workflow}`" name="workflow"></el-tab-pane>
     </el-tabs>
     <div v-loading="state.loading" class="content-box">
       <template v-if="currentNewsList.length > 0">
@@ -47,8 +46,7 @@ const newsList = computed(() => noticeStore.state.notices);
 
 const tabCount = computed(() => ({
   system: newsList.value.filter((item: any) => (item.category || NOTICE_GROUP.SYSTEM) === NOTICE_GROUP.SYSTEM).length,
-  notice: newsList.value.filter((item: any) => item.category === NOTICE_GROUP.NOTICE).length,
-  workflow: newsList.value.filter((item: any) => item.category === NOTICE_GROUP.WORKFLOW).length
+  notice: newsList.value.filter((item: any) => item.category === NOTICE_GROUP.NOTICE).length
 }));
 
 const currentNewsList = computed(() => {
@@ -60,9 +58,6 @@ const currentNewsList = computed(() => {
 const emptyDescription = computed(() => {
   if (activeTab.value === NOTICE_GROUP.NOTICE) {
     return '暂无通知公告消息';
-  }
-  if (activeTab.value === NOTICE_GROUP.WORKFLOW) {
-    return '暂无工作流消息';
   }
   return '暂无系统消息';
 });

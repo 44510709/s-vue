@@ -154,7 +154,7 @@ export const initMessageBox = async () => {
     return;
   }
   const { data } = await getMessageBox();
-  const notices = [...(data?.systemList ?? []), ...(data?.noticeList ?? []), ...(data?.workflowList ?? [])].map(
+  const notices = [...(data?.systemList ?? []), ...(data?.noticeList ?? [])].map(
     toNoticeItem
   );
   useNoticeStore().setNotices(notices);
