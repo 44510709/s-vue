@@ -24,13 +24,6 @@ export default {
         required: 'Please enter a verification code'
       }
     },
-    social: {
-      wechat: 'Wechat Login',
-      maxkey: 'MaxKey Login',
-      topiam: 'TopIam Login',
-      gitee: 'Gitee Login',
-      github: 'Github Login'
-    }
   },
   // 注册页面国际化
   register: {
