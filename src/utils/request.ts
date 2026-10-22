@@ -6,9 +6,9 @@ import cache from '@/plugins/cache';
 import router from '@/router';
 import { useUserStore } from '@/store/modules/user';
 import { getToken } from '@/utils/auth';
-import { decryptBase64, decryptWithAes, encryptBase64, encryptWithAes, generateAesKey } from '@/utils/crypto';
+import { encryptBase64, encryptWithAes, generateAesKey } from '@/utils/crypto';
 import { errorCode } from '@/utils/errorCode';
-import { decrypt, encrypt } from '@/utils/jsencrypt';
+import { encrypt } from '@/utils/jsencrypt';
 import { blobValidate, tansParams } from '@/utils/ruoyi';
 import { saveBlob } from '@/utils/save';
 
@@ -178,22 +178,6 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (res: any) => {
-    if (import.meta.env.VITE_APP_ENCRYPT === 'true') {
-      // 加密后的 AES 秘钥
-      const keyStr = res.headers[encryptHeader];
-      // 加密
-      if (keyStr != null && keyStr != '') {
-        const data = res.data;
-        // 请求体 AES 解密
-        const base64Str = decrypt(keyStr);
-        // base64 解码 得到请求头的 AES 秘钥
-        const aesKey = decryptBase64(base64Str.toString());
-        // aesKey 解码 data
-        const decryptData = decryptWithAes(data, aesKey);
-        // 将结果 (得到的是 JSON 字符串) 转为 JSON
-        res.data = JSON.parse(decryptData);
-      }
-    }
     // 未设置状态码则默认成功状态
     const code = res.data.code || HttpStatus.SUCCESS;
     // 获取错误信息

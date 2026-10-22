@@ -30,3 +30,7 @@ components.d.ts
 
 # Claude Code 本地配置
 .claude/
+
+.env
+.env.*
+!.env.example
